@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "2bf84c6e-1c9d-44a6-8604-15ad6d013b81",
+		"name": "To share",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Example of tests for a GET request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body is an array\", function () {\r",
+							"    pm.expect(pm.response.json()).to.be.an('array');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains test owners\", function () {\r",
+							"    // Define the expected owners\r",
+							"    const expectedOwners = [\r",
+							"        {\r",
+							"            \"id\": \"1\",\r",
+							"            \"name\": \"John Smith\",\r",
+							"            \"dateOfBirth\": \"1980-01-01\",\r",
+							"            \"address\": \"123 Main St\",\r",
+							"            \"accounts\": [\r",
+							"                {\r",
+							"                    \"id\": \"1\",\r",
+							"                    \"dateCreated\": \"2022-01-01T00:00:00Z\",\r",
+							"                    \"accountType\": \"Checking\",\r",
+							"                    \"ownerId\": \"1\"\r",
+							"                },\r",
+							"                {\r",
+							"                    \"id\": \"2\",\r",
+							"                    \"dateCreated\": \"2022-01-02T00:00:00Z\",\r",
+							"                    \"accountType\": \"Savings\",\r",
+							"                    \"ownerId\": \"1\"\r",
+							"                }\r",
+							"            ]\r",
+							"        },\r",
+							"        {\r",
+							"            \"id\": \"2\",\r",
+							"            \"name\": \"Jane Doe\",\r",
+							"            \"dateOfBirth\": \"1990-01-01\",\r",
+							"            \"address\": \"456 Elm St\",\r",
+							"            \"accounts\": [\r",
+							"                {\r",
+							"                    \"id\": \"3\",\r",
+							"                    \"dateCreated\": \"2022-01-03T00:00:00Z\",\r",
+							"                    \"accountType\": \"Checking\",\r",
+							"                    \"ownerId\": \"2\"\r",
+							"                }\r",
+							"            ]\r",
+							"        },\r",
+							"        {\r",
+							"            \"id\": \"3\",\r",
+							"            \"name\": \"Bob Johnson\",\r",
+							"            \"dateOfBirth\": \"2000-01-01\",\r",
+							"            \"address\": \"789 Oak St\",\r",
+							"            \"accounts\": [\r",
+							"                {\r",
+							"                    \"id\": \"4\",\r",
+							"                    \"dateCreated\": \"2022-01-04T00:00:00Z\",\r",
+							"                    \"accountType\": \"Savings\",\r",
+							"                    \"ownerId\": \"3\"\r",
+							"                }\r",
+							"            ]\r",
+							"        }\r",
+							"    ];\r",
+							"\r",
+							"    // Get the actual owners from the response body\r",
+							"    const actualOwners = pm.response.json();\r",
+							"\r",
+							"    // Check that the actual owners contain the expected owners\r",
+							"    pm.expect(actualOwners).to.have.deep.members(expectedOwners);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"baseUrl\",\"https://localhost:52150\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrI}}/api/owners",
+					"host": [
+						"{{baseUrI}}"
+					],
+					"path": [
+						"api",
+						"owners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Example of tests for POST request",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.variables.set(\"baseUrl\",\"https://localhost:52150\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains message\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"User registration successful\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 500ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							"\r",
+							"//Negative tests\r",
+							"pm.test(\"Register User - Existing User Name\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.expect(pm.response.text()).to.include(\"User name 'existinguser' is already taken\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Register User - Invalid Email\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"    pm.expect(pm.response.text()).to.include(\"The Email field is not a valid e-mail address\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"displayName\": \"TestUser\",\r\n  \"userName\": \"TU-3\",\r\n  \"password\": \"Admi@4Pass\",\r\n  \"confirmPassword\": \"Admi@4Pass\",\r\n  \"email\": \"tu_3@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/users/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "{{baseUrl}}",
+			"value": "'https://localhost:52150",
+			"type": "default"
+		}
+	]
+}
